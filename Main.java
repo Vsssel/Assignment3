@@ -61,10 +61,18 @@ public class Main {
         } while(isUsernameExists(username));
         
         do{
-            System.out.print("Please write your password: ");
-            password = scan.next();
+            do{
+                System.out.print("Please write your password: ");
+                password = scan.next();
+                if(!isValidPassword(password)){
+                    System.out.println("Password should conatins 8 symbols or more");
+                }
+            } while(!isValidPassword(password));
             System.out.print("Please repeat your password: ");
             repeatedPassword = scan.next();
+            if(!checkPassword(password, repeatedPassword)){
+                System.out.println("Passwords do not match");
+            }
         } while (!checkPassword(password, repeatedPassword));
         
         Singleton singleton = Singleton.getInstance();
@@ -72,7 +80,7 @@ public class Main {
         try (PreparedStatement preparedStatement = singleton.getConnection().prepareStatement("INSERT INTO `users` (`username`, `password`) VALUES (?, ?)")) {
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
-            int rowsAffected = preparedStatement.executeUpdate(); // Use executeUpdate() for INSERT
+            int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("User registered successfully.");
             } else {
@@ -98,6 +106,13 @@ public class Main {
 
     public static boolean checkPassword(String password, String repeatedPassword){
         if(password.equals(repeatedPassword)){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isValidPassword(String password){
+        if(password.length() >= 8){
             return true;
         }
         return false;
