@@ -1,18 +1,16 @@
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
 
 public final class Singleton {
     private static Singleton instance;
     public Statement statement;
+    public Connection connection;
 
     JSONParser parser = new JSONParser();
 
@@ -27,6 +25,7 @@ public final class Singleton {
             Connection connection = DriverManager.getConnection(url, username, password);
             Statement statement = connection.createStatement();
             this.statement = statement;
+            this.connection = connection;
         } catch (SQLException | IOException | ParseException e) { 
             e.printStackTrace();
         }
@@ -41,5 +40,9 @@ public final class Singleton {
 
     public Statement getStatement() {
         return statement;
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }
