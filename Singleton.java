@@ -13,6 +13,7 @@ import org.json.simple.parser.*;
 public final class Singleton {
     private static Singleton instance;
     public Statement statement;
+    public Connection connection;
 
     JSONParser parser = new JSONParser();
 
@@ -27,6 +28,7 @@ public final class Singleton {
             Connection connection = DriverManager.getConnection(url, username, password);
             Statement statement = connection.createStatement();
             this.statement = statement;
+            this.connection = connection;
         } catch (SQLException | IOException | ParseException e) { 
             e.printStackTrace();
         }
@@ -41,5 +43,9 @@ public final class Singleton {
 
     public Statement getStatement() {
         return statement;
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 }
